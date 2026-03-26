@@ -86,4 +86,38 @@ describe('POKER HAND EVALUATION - Catégories de base', () => {
         }); 
 
     });
+
+
+    describe('Combinaisons Supérieures (Full house, Carré, Quinte Flush)', () => {
+        test('doit détecter un Full house et choisir le meilleur brelan et la meilleure paire', () => {
+            const board = ['Kh', 'Kd', '4c', '4s', '9c'];
+            const holeCards = ['Ks', 'Jd'];
+
+            const result = evaluateHand(board, holeCards);
+            expect(evaluateHand(board, holeCards)).toEqual({
+                category: 'Full house',
+                chosen5: ['Kh', 'Kd', 'Ks', '4c', '4s']
+            });
+        });
+        
+        test('doit détecter un carré et choisir le kicker le plus élevé', () => {
+            const board = ['7h', '7d', '7c', '4s', '2c'];
+            const holeCards = ['7s', 'Ah'];
+            const result = evaluateHand(board, holeCards);
+            expect(result).toEqual({
+                category: 'Four of a kind',
+                chosen5: ['7h', '7d', '7c', '7s', 'Ah']
+            });
+        });
+
+        test('doit détecter une quinte flush et choisir les 5 cartes de la même couleur en ordre décroissant', () => {
+            const board = ['8h', '9h', 'Th', 'Jh', '2c'];
+            const holeCards = ['Qh', 'Ah'];
+            const result = evaluateHand(board, holeCards);
+            expect(result).toEqual({
+                category: 'Straight flush',
+                chosen5: ['Qh', 'Jh', 'Th', '9h', '8h']
+            });
+        });
+    }); 
 });
