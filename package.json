@@ -1,0 +1,24 @@
+{
+  "name": "texas_hold_em_poker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yumeei/tdd-texas-hold-em-poker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yumeei/tdd-texas-hold-em-poker/issues"
+  },
+  "homepage": "https://github.com/yumeei/tdd-texas-hold-em-poker#readme",
+  "dependencies": {
+    "vitest": "^4.1.1"
+  }
+}
