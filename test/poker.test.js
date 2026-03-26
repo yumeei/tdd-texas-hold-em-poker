@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import evaluateHand from './poker.js';
+import {evaluateHand, comparePlayers} from './poker.js';
 
 describe('POKER HAND EVALUATION - Catégories de base', () => {
 
@@ -121,3 +121,33 @@ describe('POKER HAND EVALUATION - Catégories de base', () => {
         });
     }); 
 });
+
+
+describe('COMPARAISON DES JOUEURS - Tie-breaks et Gagnants', () => {
+        test('doit faire gagner le joueur avec la meilleure catégorie', () => {
+            const board = ['2h', '7d', '4c', '9s', 'Jc'];
+            const player1 = ['Jd', '3h'];
+            const player2 = ['9h', '9d'];
+            
+            const result = comparePlayers(board, [player1, player2]);
+            expect(result.winners).toEqual([1]);
+        });
+
+        test('doit départager deux joueurs avec le même Carré grâce au kicker', () => {
+            const board = ['7h', '7d', '7c', '4s', '2c'];
+            const player1 = ['Ah', 'Kh'];
+            const player2 = ['Qd', 'Jc'];
+            
+            const result = comparePlayers(board, [player1, player2]);
+            expect(result.winners).toEqual([0]);
+        });
+
+        test('doit gérer une égalité parfaite (split pot) quand le board est la meilleure main', () => {
+            const board = ['5h', '6d', '7c', '8s', '9c'];
+            const player1 = ['Ah', 'Ac'];
+            const player2 = ['Kd', 'Qc'];
+            
+            const result = comparePlayers(board, [player1, player2]);
+            expect(result.winners).toEqual([0, 1]);
+        });
+    });

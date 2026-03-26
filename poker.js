@@ -3,6 +3,18 @@ const RANK_VALUES = {
     'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14
 };
 
+const CATEGORY_RANKS = {
+    'High Card': 1,
+    'One Pair': 2,
+    'Two Pair': 3,
+    'Three of a Kind': 4,
+    'Straight': 5,
+    'Flush': 6,
+    'Full house': 7,
+    'Four of a kind': 8,
+    'Straight flush': 9
+};
+
 function sortCardsDescending(cards) {
     return cards.sort((a, b) => RANK_VALUES[b[0]] - RANK_VALUES[a[0]]);
 }
@@ -118,4 +130,58 @@ function evaluateHand(board, holeCards) {
     return { category: 'High Card', chosen5: sortedCards.slice(0, 5) };
 }
 
-export default evaluateHand;
+function comparePlayers(board, playersHoleCards) {
+    const evaluatedHands = playersHoleCards.map(holeCards => evaluateHand(board, holeCards));
+    
+    let winners = [];
+    let bestHand = null;
+
+    for (let i = 0; i < evaluatedHands.length; i++) {
+        const currentHand = evaluatedHands[i];
+        
+        if (!bestHand) {
+            winners = [i];
+            bestHand = currentHand;
+            continue;
+        }
+
+        const currentCategoryRank = CATEGORY_RANKS[currentHand.category];
+        const bestCategoryRank = CATEGORY_RANKS[bestHand.category];
+
+        if (currentCategoryRank > bestCategoryRank) {
+            winners = [i];
+            bestHand = currentHand;
+        } else if (currentCategoryRank === bestCategoryRank) {
+            let isTie = true;
+            let isBetter = false;
+
+            for (let j = 0; j < 5; j++) {
+                const currentCardRank = RANK_VALUES[currentHand.chosen5[j][0]];
+                const bestCardRank = RANK_VALUES[bestHand.chosen5[j][0]];
+
+                if (currentCardRank > bestCardRank) {
+                    isBetter = true;
+                    isTie = false;
+                    break;
+                } else if (currentCardRank < bestCardRank) {
+                    isTie = false;
+                    break;
+                }
+            }
+
+            if (isBetter) {
+                winners = [i];
+                bestHand = currentHand;
+            } else if (isTie) {
+                winners.push(i);
+            }
+        }
+    }
+
+    return {
+        winners: winners,
+        hands: evaluatedHands
+    };
+}
+
+export { evaluateHand, comparePlayers };
