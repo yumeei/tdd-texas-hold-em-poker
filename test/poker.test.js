@@ -29,4 +29,34 @@ describe('POKER HAND EVALUATION - Catégories de base', () => {
         });
     });
     });
+
+    describe('One pair, two pair, three of a kind', () => {
+    test('doit détecter une paire et trier les  3 kickers', () => {
+        const board = ['2h', '7d', '4c', '9s', 'Jc'];
+        const holeCards = ['Jd', '3h'];
+        expect(evaluateHand(board, holeCards)).toEqual({
+            category: 'One Pair',
+            chosen5: ['Jc', 'Jd', '9s', '7d', '4c'] 
+        });
+    });
+
+    test ('doit détecter deux paires et trier le kicker', () => {
+        const board = ['2h', '7d', '4c', '9s', 'Jc'];
+        const holeCards = ['Jd', '7h'];
+        expect(evaluateHand(board, holeCards)).toEqual({
+            category: 'Two Pair',
+            chosen5: ['Jc', 'Jd', '7d', '7h', '9s']
+        });
+    });
+
+    test('doit détecter un brelan et trier les 2 kickers', () => {
+        const board = ['2h', '7d', '4c', '9s', 'Jc'];
+        const holeCards = ['Jd', 'Jh'];
+        expect(evaluateHand(board, holeCards)).toEqual({
+            category: 'Three of a Kind',
+            chosen5: ['Jc', 'Jd', 'Jh', '9s', '7d']
+        });
+    });
 });
+});
+
