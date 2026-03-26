@@ -151,3 +151,29 @@ describe('COMPARAISON DES JOUEURS - Tie-breaks et Gagnants', () => {
             expect(result.winners).toEqual([0, 1]);
         });
     });
+
+    describe('Cas limites et robustesse', () => {
+        
+        test('doit choisir les deux meilleures paires quand un joueur en a trois', () => {
+            const board = ['Ah', 'As', 'Kh', 'Ks', '9c'];
+            const holeCards = ['Qh', 'Qs'];
+            const result = evaluateHand(board, holeCards);
+            expect(result.category).toBe('Two Pair');
+            expect(result.chosen5).toEqual(['Ah', 'As', 'Kh', 'Ks', 'Qh']); 
+        });
+
+        test('doit former le meilleur Full House possible avec deux brelans', () => {
+            const board = ['Th', 'Td', 'Ts', '2h', '2d'];
+            const holeCards = ['2s', '9c'];
+            const result = evaluateHand(board, holeCards);
+            expect(result.category).toBe('Full house');
+            expect(result.chosen5).toEqual(['Th', 'Td', 'Ts', '2h', '2d']);
+        });
+
+        test('ne doit pas détecter de suite circulaire (Q-K-A-2-3)', () => {
+            const board = ['Qh', 'Ks', 'Ah', '2d', '3c'];
+            const holeCards = ['7s', '8c'];
+            const result = evaluateHand(board, holeCards);
+            expect(result.category).not.toBe('Straight');
+        });
+    });
